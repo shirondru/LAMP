@@ -65,7 +65,7 @@ I use W&B to log training runs. Follow the [Weights & Biases quickstart](https:/
 | `gencode_v26_gene_id_to_name.tsv` | GTEx v8 gene IDs to gene names |
 | `background_snvs/background_snvs_Whole_Blood.csv.gz` | background SNVs for training models on direct variant effects. This was created in scripts/background_snvs/make_background_snvs.ipynb  |
 
-### Download or create yourself
+### Data to download and/or preprocess
 1. **Reference genome:** Please download and place the hg38 reference genome, plus its `.fai` index in `data/hg38_genome.fa[i]`
 
 2. **Personal genomes** (controlled access). Unfortunately, we cannot release GTEx Whole Genome Sequences, because these data are protected. To make use of LAMP, you must have access to whole genome data from GTEx. Alternatively, if you have whole-genome sequencing with paired expression from another source (e.g., GEUVADIS) this repository can be adapted to make use of this. 
@@ -74,7 +74,8 @@ I use W&B to log training runs. Follow the [Weights & Biases quickstart](https:/
 
    To make the SNPs-only VCF/BCF and the consensus FASTAs from `GTEx_Analysis_2017-06-05_v8_WholeGenomeSeq_838Indiv_Analysis_Freeze.vcf.gz`, follow the repository's instructions to use the scripts in [`code/process_vcf/`](https://github.com/shirondru/enformer_fine_tuning/tree/master/code/process_vcf) of [enformer_fine_tuning](https://github.com/shirondru/enformer_fine_tuning) (written for an SGE cluster). 
 
-3. **Enformer weights.** These download automatically from Hugging Face (`EleutherAI/enformer-official-rough`). On machines without internet, save them first with `Enformer.from_pretrained(...).save_pretrained('data/Enformer-from_pretrained')`.
+3. **Enformer weights.** These download automatically from Hugging Face (`EleutherAI/enformer-official-rough`). If your cluster runs without access to the internet, you will need to pre-download the weights from huggingface and pass in the path to the downloaded weights to Enformer.from_pretrained(path_to_weights)
+
 
 ## 3. Training
 
@@ -95,10 +96,9 @@ These job scripts can accept additional arguments that can be passed to `lamp/tr
 ### Directly
 ```bash
 cd $LAMP_ROOT/lamp
-python train.py --mode variant_effect_twinnet \
-    --config_path ../configs/variant_effect_twinnet.yaml \
+python train.py --mode personal_genome \
+    --config_path ../configs/personal_genome.yaml \
     --motif_positions ../data/motif_positions/STAT1_uniform_motif_positions_49kb.csv \
-    --background_snvs ../data/background_snvs/background_snvs_Whole_Blood.csv.gz \
     --fold 0 --seed 0 --n_gpus 1
 ```
 For a quick test, add `--debug 1 --max_epochs 1 --train_gene_path ../data/gene_lists/train_genes_279.txt`. Debug mode uses one GPU, skips saving datasets to avoid generating unecessary files, and logs to the W&B project `LAMP_test` (to avoid wandb bloat)

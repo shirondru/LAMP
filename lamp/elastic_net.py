@@ -129,7 +129,7 @@ EXPRESSION = {}  # open each expression file once; re-opening the same netCDF fi
 
 
 def load_ds(save_dir, split, config, filename=None):
-    ds = torch.load(os.path.join(save_dir, filename or f'{split}_ds.pt'))
+    ds = torch.load(os.path.join(save_dir, filename or f'{split}_ds.pt'), weights_only=False)  # a pickled dataset object, not just weights (torch>=2.6 defaults to True)
     ds = getattr(ds, 'base_dataset', ds)  # valid/test are wrapped in DoubleRCDataset
     if not hasattr(ds, 'gene_expression_df'):  # removed before saving
         path = config[f'{split}_expression_filepath']
