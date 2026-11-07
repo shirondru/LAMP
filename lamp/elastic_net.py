@@ -202,6 +202,10 @@ def main():
             del train_ds.expression_vals[gene]
             train_ds.effect_allele_freq[gene] = majority_af
         train_ds.define_genotypes()  # re-draws genotypes for every gene; only the rare-variant genes are kept below
+        if not pd.isna(config.get('expression_delta')):
+            # --expression_delta runs (target r2 = -1): reuse the fixed effect size; the r2 formula would give NaN
+            for gene in rare_var_genes:
+                train_ds.expression_delta[gene] = float(config['expression_delta'])
         train_ds.define_expression_vals()
         expression, genotypes = get_expression_and_genotype(train_ds)
         train_expr = pd.concat([train_expr[~train_expr['gene'].isin(rare_var_genes)], expression[expression['gene'].isin(rare_var_genes)]])
