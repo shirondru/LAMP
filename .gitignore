@@ -9,3 +9,8 @@ data/hg38_genome.fa.fai
 data/ConsensusSeqs_SNPsOnlyUnphased
 data/Enformer-from_pretrained
 data/*.allpairs.parquet
+data/*.vcf.gz
+data/*.vcf.gz.csi
+data/*.vcf.gz.tbi
+data/*.bcf.gz
+data/*.bcf.gz.csi
