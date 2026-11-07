@@ -1,0 +1,25 @@
+# Train on simulated personal genomes (--mode personal_genome)
+experiment_name: PersonalGenome
+project: LAMP
+seq_len: 49152
+learning_rate: 5e-6
+train_batch_size: 28
+gradient_accumulation: 1 # 1 = optimizer step every batch (no accumulation)
+max_epochs: 100
+precision: bf16-mixed
+tissues_to_train: "Whole_Blood"
+gradient_clip_val: 0.05
+patience: 20
+valid_metrics_save_freq: 1
+position_idx: 5 # position within the motif of the synthetic variant
+train_target_r2: 0.5
+valid_target_r2: 0.5
+test_target_r2: 0.5
+monitor: mean_pearsonrz_across_valid_genes_across_valid_donors
+monitor_mode: max
+n_gpus: 4
+
+train_gene_path: ${LAMP_ROOT}/data/gene_lists/train_genes_3k.txt
+valid_gene_path: ${LAMP_ROOT}/data/gene_lists/valid_genes.txt
+test_gene_path: ${LAMP_ROOT}/data/gene_lists/all_blood_test_genes.txt
+save_dir: ${LAMP_ROOT}/results
