@@ -1,5 +1,5 @@
 # LAMP
-This repository implements the artificial SNV (aSNV) training framework we detail in our manuscript: LAMP sheds light on how sequence to function models learn variant effects during post-training
+This repository implements the artificial SNV (aSNV) training framework we detail in our manuscript: **LAMP sheds light on how sequence to function models learn variant effects during post-training**
 
 
 LAMP fine-tunes Enformer on simulated genetic effects on gene expression, using GTEx whole-blood expression and GTEx personal genomes.
